@@ -1,1 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hybrid Cloud Demo</title>
+</head>
+<body>
+    <h1>Hybrid Cloud Project</h1>
+    <button onclick="getData()">Get Data from Backend</button>
 
+    <p id="output"></p>
+
+    <script>
+        async function getData() {
+            const res = await fetch("http://localhost:3000/api");
+            const data = await res.json();
+            document.getElementById("output").innerText = data.message;
+        }
+    </script>
+</body>
+</html>
