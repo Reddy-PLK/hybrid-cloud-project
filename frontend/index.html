@@ -2,112 +2,150 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Hybrid Cloud Demo</title>
+<title>Hybrid Cloud Ultra UI</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(-45deg, #667eea, #764ba2, #ff758c, #42e695);
-        background-size: 400% 400%;
-        animation: gradientBG 10s ease infinite;
-        overflow: hidden;
-        color: white;
-    }
+:root {
+    --bg1: #667eea;
+    --bg2: #764ba2;
+    --text: white;
+}
 
-    @keyframes gradientBG {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
-    }
+body.light {
+    --bg1: #f5f7fa;
+    --bg2: #c3cfe2;
+    --text: #222;
+}
 
-    .container {
-        backdrop-filter: blur(15px);
-        background: rgba(255, 255, 255, 0.1);
-        padding: 40px;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-        animation: fadeIn 2s ease;
-    }
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, var(--bg1), var(--bg2));
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    color: var(--text);
+    overflow: hidden;
+}
 
-    h1 {
-        font-size: 38px;
-        margin-bottom: 20px;
-    }
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
 
-    button {
-        padding: 15px 30px;
-        font-size: 18px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(145deg, #ff7eb3, #ff758c);
-        color: white;
-        cursor: pointer;
-        box-shadow: 0 0 15px #ff758c, 0 8px #c94f6d;
-        transition: all 0.2s ease;
-    }
+.container {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    animation: fadeIn 2s ease;
+}
 
-    button:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 0 25px #ff758c, 0 12px #c94f6d;
-    }
+h1 {
+    font-size: 36px;
+}
 
-    button:active {
-        transform: translateY(4px);
-        box-shadow: 0 4px #c94f6d;
-    }
+button {
+    padding: 15px 30px;
+    margin-top: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #ff7eb3, #ff758c);
+    color: white;
+    box-shadow: 0 0 15px #ff758c;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
 
-    #output {
-        margin-top: 20px;
-        font-size: 20px;
-        opacity: 0;
-        transition: opacity 1s ease;
-    }
+button:hover {
+    transform: scale(1.05);
+}
 
-    .loader {
-        margin-top: 20px;
-        border: 4px solid rgba(255,255,255,0.2);
-        border-top: 4px solid white;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: none;
-    }
+button:active::after {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.3);
+    top: -50%;
+    left: -50%;
+    border-radius: 50%;
+    animation: ripple 0.5s;
+}
 
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
+@keyframes ripple {
+    from {transform: scale(0);}
+    to {transform: scale(1);}
+}
 
-    canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
-    }
+.toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 20px;
+}
 
-    @keyframes fadeIn {
-        from {opacity: 0;}
-        to {opacity: 1;}
-    }
+.loader {
+    margin: 20px auto;
+    border: 4px solid rgba(255,255,255,0.2);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+#output {
+    margin-top: 20px;
+    font-size: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+canvas {
+    position: absolute;
+    z-index: -1;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
 </style>
 
 </head>
 
 <body>
 
+<div class="toggle" onclick="toggleTheme()">🌗</div>
+
 <canvas id="particles"></canvas>
 
 <div class="container">
-    <h1> Hybrid Cloud Project</h1>
+    <h1>Hybrid Cloud Ultra</h1>
 
-    <button onclick="getData()">Get Data from Backend</button>
+    <button onclick="getData()">Fetch Data</button>
 
     <div class="loader" id="loader"></div>
 
@@ -115,60 +153,59 @@
 </div>
 
 <script>
-    async function getData() {
-        const loader = document.getElementById("loader");
-        const output = document.getElementById("output");
+const clickSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
 
-        loader.style.display = "block";
-        output.style.opacity = 0;
+async function getData() {
+    clickSound.play();
 
-        const res = await fetch("https://backend-service-jkn0.onrender.com/api");
-        const data = await res.json();
+    const loader = document.getElementById("loader");
+    const output = document.getElementById("output");
 
-        loader.style.display = "none";
-        output.innerText = data.message;
-        output.style.opacity = 1;
-    }
+    loader.style.display = "block";
+    output.classList.remove("show");
 
-    // PARTICLES EFFECT
-    const canvas = document.getElementById("particles");
-    const ctx = canvas.getContext("2d");
+    const res = await fetch("https://backend-service-jkn0.onrender.com/api");
+    const data = await res.json();
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    loader.style.display = "none";
+    output.innerText = data.message;
+    output.classList.add("show");
+}
 
-    let particles = [];
+function toggleTheme() {
+    document.body.classList.toggle("light");
+}
 
-    for (let i = 0; i < 80; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 3,
-            speedX: Math.random() - 0.5,
-            speedY: Math.random() - 0.5
-        });
-    }
+// PARTICLES
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
 
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-        particles.forEach(p => {
-            p.x += p.speedX;
-            p.y += p.speedY;
+let particles = [];
 
-            ctx.fillStyle = "white";
-            ctx.fillRect(p.x, p.y, p.size, p.size);
+for (let i = 0; i < 100; i++) {
+    particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        size: Math.random()*3,
+        speedX: Math.random()-0.5,
+        speedY: Math.random()-0.5
+    });
+}
 
-            if (p.x > canvas.width) p.x = 0;
-            if (p.x < 0) p.x = canvas.width;
-            if (p.y > canvas.height) p.y = 0;
-            if (p.y < 0) p.y = canvas.height;
-        });
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
+function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+        p.x+=p.speedX;
+        p.y+=p.speedY;
+        ctx.fillStyle="white";
+        ctx.fillRect(p.x,p.y,p.size,p.size);
+    });
+    requestAnimationFrame(animate);
+}
+animate();
 </script>
 
 </body>
